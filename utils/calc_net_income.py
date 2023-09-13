@@ -11,7 +11,7 @@ def extract_price(s: str) -> float:
     return 0.0
 
 def calc_income_minus_expenditure(city: str, income: float, options) -> float:
-    page = urlopen(f'{base_url}{city}')
+    page = urlopen(f'{base_url}{city}?displayCurrency={options.get("currency")}')
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
     costs = soup.find_all("span", attrs={"class": "emp_number"})
