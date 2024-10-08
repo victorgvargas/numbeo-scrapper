@@ -1,5 +1,4 @@
 from flask_login import UserMixin
-from app import mysql
 
 class User(UserMixin):
     def __init__(self, id, username, email, password):
@@ -10,6 +9,7 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
+        from app import mysql
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
         user = cur.fetchone()
@@ -22,6 +22,7 @@ class User(UserMixin):
 
     @staticmethod
     def get_by_email(email):
+        from app import mysql
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM users WHERE email = %s", (email,))
         user = cur.fetchone()
@@ -34,6 +35,7 @@ class User(UserMixin):
 
     @staticmethod
     def create(username, email, password):
+        from app import mysql
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
         mysql.connection.commit()
