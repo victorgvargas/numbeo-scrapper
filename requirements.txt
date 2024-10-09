@@ -8,5 +8,5 @@ Flask-Login==0.5.0
 Flask-MYSQLdb==0.2.0
 Flask-WTF==0.15.1
 bcrypt==3.2.0
-mysqclient==2.1.0
+mysqclient==2.2.4
 wtforms==2.3.3
