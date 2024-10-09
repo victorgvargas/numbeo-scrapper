@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: colcalc
+    env: docker
+    plan: free
+    dockerFilePath: ./Dockerfile
+    envVars:
+      - key: MYSQL_ROOT_PASSWORD
+        value: admin
+      - key: MYSQL_DATABASE
+        value: colcalc
+      - key: MYSQL_USER
+        value: root
+      - key: MYSQL_PASSWORD
+        value: admin
