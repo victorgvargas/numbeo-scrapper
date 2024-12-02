@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.utils import calc_income_minus_expenditure
+from app.utils import calc_income_minus_expenditure, calc_costs
 
 
 home_bp = Blueprint('home_bp', __name__)
@@ -22,3 +22,12 @@ def get_income_data():
                                            "currency": currency})
 
     return jsonify({"result": result})
+
+@home_bp.route('/costs', methods=['GET'])
+def get_costs():
+    city = request.args.get('city')
+    currency = request.args.get('currency')
+
+    result = calc_costs(city, {"currency": currency})
+
+    return jsonify(result)

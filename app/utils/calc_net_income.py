@@ -10,7 +10,7 @@ def extract_price(s: str) -> float:
         return float(match.group(1).replace(",", ""))
     return 0.0
 
-def calc_income_minus_expenditure(city: str, income: float, options) -> float:
+def calc_costs(city: str, options: dict) -> dict:
     page = urlopen(f'{base_url}{city}?displayCurrency={options.get("currency")}')
     html = page.read().decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
@@ -44,12 +44,24 @@ def calc_income_minus_expenditure(city: str, income: float, options) -> float:
     single_person_cost = extract_price(costs[1].text)
     family_of_four_cost = extract_price(costs[0].text)
 
+    return {
+        "single_person_cost": single_person_cost,
+        "family_of_four_cost": family_of_four_cost,
+        "centre_rent": centre_rent,
+        "outskirts_rent": outskirts_rent,
+        "three_bedroom_city_centre_rent": three_bedroom_city_centre_rent,
+        "three_bedroom_outskirts_rent": three_bedroom_outskirts_rent
+    }
+
+def calc_income_minus_expenditure(city: str, income: float, options: dict) -> float:
+    costs = calc_costs(city, options)
+
     if options.get("city_centre"):
-        return income - single_person_cost - centre_rent
+        return income - costs['single_person_cost'] - costs['centre_rent']
     elif options.get("outskirts"):
-        return income - single_person_cost - outskirts_rent
+        return income - costs['single_person_cost'] - costs['outskirts_rent']
     elif options.get("three_bedroom_city_centre"):
-        return income - family_of_four_cost - three_bedroom_city_centre_rent
+        return income - costs['family_of_four_cost'] - costs['three_bedroom_city_centre_rent']
     elif options.get("three_bedroom_outskirts"):
-        return income - family_of_four_cost - three_bedroom_outskirts_rent
-    return income - single_person_cost
+        return income - costs['family_of_four_cost'] - costs['three_bedroom_outskirts_rent']
+    return income - costs['single_person_cost']
