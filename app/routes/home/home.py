@@ -7,7 +7,7 @@ home_bp = Blueprint('home_bp', __name__)
 @home_bp.route('/', methods=['GET'])
 def get_income_data():
     city = request.args.get('city')
-    income = float(request.args.get('income'))
+    income = float(request.args.get('income', 0))
     currency = request.args.get('currency')
     city_centre = request.args.get('city_centre') == 'true'
     outskirts = request.args.get('outskirts') == 'true'
