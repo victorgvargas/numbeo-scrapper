@@ -16,6 +16,8 @@ def calc_costs(city: str, options: dict) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     costs = soup.find_all("span", attrs={"class": "emp_number"})
 
+    print(f"Debug in Render: {costs}")
+
     centre_rent_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (1 bedroom) in City Centre" in tag.text)
     outskirts_rent_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (1 bedroom) Outside of Centre" in tag.text)
     three_bedroom_city_centre_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (3 bedrooms) in City Centre" in tag.text)
