@@ -11,7 +11,3 @@ bcrypt==3.2.0
 mysqlclient==2.2.1
 wtforms==2.3.3
 Werkzeug==2.3.7
-Flask-OAuthLib==0.9.6
-cachelib==0.13.0
-requests-oauthlib==1.1.0
-oauthlib==2.1.1
