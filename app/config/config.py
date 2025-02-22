@@ -6,3 +6,14 @@ class Config:
     MYSQL_USER = os.environ.get('MYSQL_USER', 'root')
     MYSQL_PASSWORD = os.environ.get('MYSQL_PASSWORD', 'admin')
     MYSQL_DB = os.environ.get('MYSQL_DB', 'colcalc')
+    MYSQL_PORT = 3306 
+    MYSQL_UNIX_SOCKET = None
+    MYSQL_CONNECT_TIMEOUT = 10
+    MYSQL_READ_DEFAULT_FILE = None
+    MYSQL_USE_UNICODE = True
+    MYSQL_CHARSET = 'utf8'
+    MYSQL_SQL_MODE = None
+    MYSQL_CURSORCLASS = 'DictCursor'
+    MYSQL_AUTOCOMMIT = False
+    MYSQL_CUSTOM_OPTIONS = None
+    MYSQL_OPTION_FILES = None

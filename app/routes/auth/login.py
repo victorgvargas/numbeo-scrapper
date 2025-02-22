@@ -7,12 +7,13 @@ login_bp = Blueprint('login_bp', __name__)
 
 @login_bp.route('/login', methods=['POST'])
 def login():
-    from app import bcrypt
+    from flask_bcrypt import Bcrypt
+    bcrypt = Bcrypt()
     data = request.get_json()
-    username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
-    user = User.get_by_email(username)
+    user = User.get_by_email(email)
 
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user)

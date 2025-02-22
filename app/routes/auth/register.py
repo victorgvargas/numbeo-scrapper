@@ -6,7 +6,8 @@ register_bp = Blueprint('register_bp', __name__)
 
 @register_bp.route('/register', methods=['POST'])
 def register():
-    from app import bcrypt
+    from flask_bcrypt import Bcrypt
+    bcrypt = Bcrypt()
     data = request.get_json()
     username = data.get('username')
     email = data.get('email')

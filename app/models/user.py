@@ -9,7 +9,8 @@ class User(UserMixin):
 
     @staticmethod
     def get(user_id):
-        from app import mysql
+        from flask_mysqldb import MySQL
+        mysql = MySQL()
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
         user = cur.fetchone()
@@ -18,25 +19,39 @@ class User(UserMixin):
         if not user:
             return None
 
-        return User(id=user[0], username=user[1], password=user[2], email=user[3])
+        return User(id=user['id'], username=user['username'], password=user['password'], email=user['email'])
 
     @staticmethod
     def get_by_email(email):
-        from app import mysql
+        from flask_mysqldb import MySQL
+        mysql = MySQL()
+        
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
-        user = cur.fetchone()
+        cur.execute("SELECT id, username, password, email FROM users WHERE email = %s", (email,))
+        user = cur.fetchone()  # Pode retornar None se não encontrar nada
         cur.close()
 
+        print(f"User: {user}")
+        
         if not user:
-            return None
-
-        return User(id=user[0], username=user[1], password=user[2], email=user[3])
+            return None  # Retorna None se nenhum usuário foi encontrado
+        
+        return User(id=user['id'], username=user['username'], password=user['password'], email=user['email'])
 
     @staticmethod
     def create(username, email, password):
-        from app import mysql
+        from flask_mysqldb import MySQL
+        mysql = MySQL()
         cur = mysql.connection.cursor()
+
+        # Verifica se o usuário já existe
+        cur.execute("SELECT id FROM users WHERE username = %s", (username,))
+        existing_user = cur.fetchone()
+
+        if existing_user:
+            return None  # Ou lançar uma exceção personalizada
+
+        # Inserir novo usuário
         cur.execute("INSERT INTO users (username, email, password) VALUES (%s, %s, %s)", (username, email, password))
         mysql.connection.commit()
         cur.close()
