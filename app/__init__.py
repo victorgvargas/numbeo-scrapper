@@ -6,6 +6,7 @@ from app.routes.auth.login import login_bp
 from app.routes.auth.logout import logout_bp
 from app.routes.auth.register import register_bp
 from app.routes.home import home_bp
+from app.routes.budget import budget_bp
 
 login_manager = LoginManager()
 
@@ -20,6 +21,7 @@ def create_app():
     app.register_blueprint(login_bp, url_prefix='/auth')
     app.register_blueprint(logout_bp, url_prefix='/auth')
     app.register_blueprint(register_bp, url_prefix='/auth')
+    app.register_blueprint(budget_bp, url_prefix='/budget')
     app.register_blueprint(home_bp, url_prefix='/')
 
     return app
