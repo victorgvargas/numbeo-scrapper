@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, make_response, request, jsonify
 from flask_login import login_user
 
 from app.models.user import User
@@ -17,6 +17,8 @@ def login():
 
     if user and bcrypt.check_password_hash(user.password, password):
         login_user(user)
+        res = make_response()
+        res.set_cookie('session', user.get_session_token(), httponly=True, secure=True)
         return jsonify({"message": "Logged in successfully"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401

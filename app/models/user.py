@@ -57,3 +57,11 @@ class User(UserMixin):
         cur.close()
 
         return User.get_by_email(email)
+    
+    def get_session_token(self):
+        from flask import current_app
+        from itsdangerous import URLSafeTimedSerializer
+
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+        return serializer.dumps(self.id, salt=current_app.config['SECURITY_PASSWORD_SALT'])
+    

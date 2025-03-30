@@ -16,8 +16,6 @@ def calc_costs(city: str, options: dict) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     costs = soup.find_all("span", attrs={"class": "emp_number"})
 
-    print(f"Debug in Render: {costs}")
-
     centre_rent_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (1 bedroom) in City Centre" in tag.text)
     outskirts_rent_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (1 bedroom) Outside of Centre" in tag.text)
     three_bedroom_city_centre_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (3 bedrooms) in City Centre" in tag.text)
@@ -45,6 +43,7 @@ def calc_costs(city: str, options: dict) -> dict:
 
     single_person_cost = extract_price(costs[1].text)
     family_of_four_cost = extract_price(costs[0].text)
+    costs_summary = summarize_costs_by_category(soup)
 
     return {
         "single_person_cost": single_person_cost,
@@ -52,8 +51,35 @@ def calc_costs(city: str, options: dict) -> dict:
         "centre_rent": centre_rent,
         "outskirts_rent": outskirts_rent,
         "three_bedroom_city_centre_rent": three_bedroom_city_centre_rent,
-        "three_bedroom_outskirts_rent": three_bedroom_outskirts_rent
+        "three_bedroom_outskirts_rent": three_bedroom_outskirts_rent,
+        "costs_summary": costs_summary
     }
+
+def summarize_costs_by_category(soup: BeautifulSoup) -> dict:
+    cost_table = soup.find("table", class_="data_wide_table")
+    costs_summary = {}
+    current_category = None  # Track the current category
+
+    if not cost_table:
+        print("No cost table found.")
+        return costs_summary
+
+    rows = cost_table.find_all("tr")
+
+    for row in rows:
+        # Check if this row is a category header
+        category_header = row.find("div", class_="category_title")
+        if category_header:
+            current_category = category_header.text.strip()
+            costs_summary[current_category] = 0  # Initialize category sum
+        
+        # Extract cost items under the current category
+        columns = row.find_all("td")
+        if len(columns) >= 2 and current_category:
+            price = extract_price(columns[1].text)
+            costs_summary[current_category] += price  # Sum up category costs
+
+    return costs_summary
 
 def calc_income_minus_expenditure(city: str, income: float, options: dict) -> float:
     costs = calc_costs(city, options)
