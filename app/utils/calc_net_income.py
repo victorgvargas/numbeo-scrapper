@@ -16,10 +16,10 @@ def calc_costs(city: str, options: dict) -> dict:
     soup = BeautifulSoup(html, "html.parser")
     costs = soup.find_all("span", attrs={"class": "emp_number"})
 
-    centre_rent_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (1 bedroom) in City Centre" in tag.text)
-    outskirts_rent_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (1 bedroom) Outside of Centre" in tag.text)
-    three_bedroom_city_centre_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (3 bedrooms) in City Centre" in tag.text)
-    three_bedroom_outskirts_row = soup.find(lambda tag: tag.name == "tr" and "Apartment (3 bedrooms) Outside of Centre" in tag.text)
+    centre_rent_row = soup.find(lambda tag: tag.name == "tr" and "1 Bedroom Apartment in City Centre" in tag.text)
+    outskirts_rent_row = soup.find(lambda tag: tag.name == "tr" and "1 Bedroom Apartment Outside of City Centre" in tag.text)
+    three_bedroom_city_centre_row = soup.find(lambda tag: tag.name == "tr" and "3 Bedroom Apartment in City Centre" in tag.text)
+    three_bedroom_outskirts_row = soup.find(lambda tag: tag.name == "tr" and "3 Bedroom Apartment Outside of City Centre" in tag.text)
 
     if centre_rent_row:
         centre_rent = extract_price(centre_rent_row.find_all('td')[1].text)
